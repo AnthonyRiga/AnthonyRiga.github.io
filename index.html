@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="light dark"/>
+<link rel="icon" href="data:,"/>
+<title>ToastyRaptor — Indie Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fdf3e3; --bg2:#f7e8cf; --surface:#fffaf0; --surface2:#ffffff;
+  --ink:#211712; --muted:#6f5a4a; --line:#e8d5b8;
+  --ember:#e75112; --ember-dark:#c23f08; --ember-soft:#ffe3cf;
+  --teal:#0d6e63; --teal-soft:#d3ede6; --gold:#b77900; --gold-soft:#fdeec2;
+  --dark:#1c120c; --radius:18px;
+  --shadow:0 10px 30px rgba(80,40,0,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#161009; --bg2:#1e150c; --surface:#22180f; --surface2:#2a1e12;
+    --ink:#fff1dc; --muted:#cbb49a; --line:#3d2c1b;
+    --ember:#ff7a33; --ember-dark:#ff8f52; --ember-soft:#3d2110;
+    --teal:#3ec9b6; --teal-soft:#12332e; --gold:#f2b63d; --gold-soft:#33270e;
+    --shadow:0 10px 30px rgba(0,0,0,.45);
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} *{animation:none!important;transition:none!important} }
+body{margin:0;font-family:"Archivo",system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+h1,h2,h3,.display{font-family:"Bricolage Grotesque","Archivo",sans-serif;line-height:1.02;letter-spacing:-.02em}
+a{color:var(--ember)}
+img{max-width:100%;display:block}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.topbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:13px 0}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:var(--ink)}
+.claw{width:38px;height:38px;background:var(--ember);border-radius:10px;display:grid;place-items:center;color:#fff;font-size:21px;flex:none}
+.brand b{font-family:"Bricolage Grotesque",sans-serif;font-size:21px;letter-spacing:-.02em}
+.brand b span{color:var(--ember)}
+.brand small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav a{color:var(--ink);text-decoration:none;font-weight:600;font-size:14px;padding:8px 11px;border-radius:999px}
+nav a:hover{background:var(--ember-soft)}
+nav a.support-nav{background:var(--ember);color:#fff}
+.hero{padding:44px 0 10px}
+.hero-grid{display:grid;grid-template-columns:1.08fr .92fr;gap:28px;align-items:stretch}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;background:var(--teal-soft);color:var(--teal);font-weight:700;font-size:13px;padding:7px 12px;border-radius:999px}
+.hero h1{font-size:clamp(44px,7vw,76px);margin:16px 0 12px;font-weight:800}
+.hero h1 em{font-style:normal;color:var(--ember)}
+.hero p.lede{font-size:19px;color:var(--muted);max-width:56ch;margin:0 0 20px}
+.hero p.lede strong{color:var(--ink)}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:11px 14px;min-width:108px}
+.stat b{font-family:"Bricolage Grotesque",sans-serif;font-size:22px;display:block;line-height:1}
+.stat span{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.06em}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;text-decoration:none;font-weight:700;font-size:15px;padding:13px 18px;border-radius:999px;background:var(--ink);color:var(--bg)}
+.btn.ember{background:var(--ember);color:#fff}
+.btn.ember:hover{background:var(--ember-dark)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.heart{background:#fff;color:#c23f08;border:2px solid #fff}
+.hero-art{border-radius:22px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);position:relative;min-height:320px}
+.hero-art img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.hero-art .caption{position:absolute;left:14px;bottom:14px;right:14px;background:rgba(18,10,4,.82);color:#fff;padding:12px 14px;border-radius:14px;backdrop-filter:blur(4px)}
+.hero-art .caption b{font-family:"Bricolage Grotesque",sans-serif}
+.hero-art .caption p{margin:2px 0 0;font-size:13px;opacity:.9}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#37d67a;margin-right:6px;vertical-align:middle}
+
+/* Support hero panel */
+.support-hero{margin-top:22px;background:var(--ember);color:#fff;border-radius:22px;padding:24px;display:grid;grid-template-columns:1.25fr .75fr;gap:20px;align-items:center;box-shadow:var(--shadow)}
+.support-hero h2{margin:0 0 8px;font-size:30px;color:#fff}
+.support-hero p{margin:0;opacity:.94;max-width:52ch}
+.support-actions{text-align:left;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.35);border-radius:16px;padding:16px}
+.support-actions .btn{width:100%;justify-content:center;font-size:16px;padding:14px}
+.link-note{font-size:13px;margin:10px 0 0;opacity:.95;background:rgba(0,0,0,.18);padding:8px 10px;border-radius:8px}
+section{padding:42px 0 6px}
+.sec-head{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.sec-head h2{font-size:36px;margin:0}
+.sec-head p{color:var(--muted);margin:6px 0 0;max-width:62ch}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filter{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);padding:9px 14px;border-radius:999px;font-weight:700;cursor:pointer;font-size:14px}
+.filter[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.featured{display:grid;grid-template-columns:1.15fr .85fr;background:var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow)}
+.featured img{width:100%;height:100%;object-fit:cover;min-height:300px}
+.featured-body{padding:26px}
+.badge{display:inline-flex;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.badge.live{background:#dcf7e6;color:#0a6b32}
+.badge.soon{background:var(--gold-soft);color:var(--gold)}
+.badge.test{background:var(--teal-soft);color:var(--teal)}
+.badge.dev{background:var(--ember-soft);color:var(--ember-dark)}
+@media (prefers-color-scheme: dark){ .badge.live{background:#123324;color:#6ee7a0} .badge.dev{color:var(--ember)} }
+.featured-body h3{font-size:34px;margin:12px 0 8px}
+.featured-body p{color:var(--muted);margin:0 0 14px}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.meta div{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.meta span{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;display:block}
+.meta b{font-size:14px}
+ul.checks{list-style:none;padding:0;margin:14px 0;display:grid;gap:8px}
+ul.checks li{padding-left:26px;position:relative;font-size:15px}
+ul.checks li::before{content:"✓";position:absolute;left:0;top:0;width:19px;height:19px;border-radius:50%;background:var(--teal-soft);color:var(--teal);display:grid;place-items:center;font-size:12px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 16px rgba(80,40,0,.06)}
+.card img{width:100%;aspect-ratio:16/10;object-fit:cover}
+.card-body{padding:19px;display:flex;flex-direction:column;gap:9px;flex:1}
+.card-body h3{font-size:24px;margin:2px 0 0}
+.card-body p{color:var(--muted);margin:0;font-size:15px}
+.card-body .foot{margin-top:auto;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted)}
+.tags{display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:700;background:var(--bg);border:1px solid var(--line);padding:5px 8px;border-radius:999px}
+.roadmap{background:var(--dark);color:#fff1dc;border-radius:22px;padding:26px;margin-top:8px}
+.roadmap h3{color:#fff;margin:0 0 6px;font-size:26px}
+.roadmap p.sub{color:#d8c3a5;margin:0 0 18px}
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.tl{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:15px}
+.tl b{color:#ffb38a;display:block;font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.tl strong{display:block;font-size:16px;margin-bottom:4px}
+.tl p{margin:0;font-size:14px;color:#e8d9c2}
+.about{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.about-card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px}
+.about-card h3{margin:0 0 10px;font-size:24px}
+.about-card p{color:var(--muted);margin:0 0 12px}
+.kv{display:grid;gap:9px}
+.kv div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px dashed var(--line);padding:8px 0;font-size:15px}
+.kv span{color:var(--muted)} .kv b{text-align:right;word-break:break-word}
+.support-big{background:var(--surface);border:2px solid var(--ember);border-radius:22px;padding:28px;display:grid;grid-template-columns:1.2fr .8fr;gap:24px;align-items:center;box-shadow:var(--shadow)}
+.support-big h2{font-size:36px;margin:0 0 10px}
+.support-big h2 span{color:var(--ember)}
+.support-big p{color:var(--muted);margin:0 0 12px;font-size:17px}
+.support-big .support-actions{background:var(--ember-soft);border-color:var(--ember)}
+.support-big .link-note{background:var(--surface);color:var(--ink);opacity:1;border:1px dashed var(--ember)}
+.donate-main{width:100%;justify-content:center;background:var(--ember);color:#fff;font-size:17px;padding:16px}
+.donate-alt{width:100%;justify-content:center;margin-top:9px;background:var(--surface2);color:var(--ink);border:1.5px solid var(--line)}
+footer{margin-top:46px;border-top:1px solid var(--line);padding:26px 0 36px;color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+/* Rex store-art gallery */
+.store-art{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 4px 16px rgba(80,40,0,.06)}
+.store-art-head{display:flex;gap:16px;align-items:center;margin-bottom:16px}
+.store-art-head img.icon{width:76px;height:76px;border-radius:19px;border:1px solid var(--line);flex:none;box-shadow:0 4px 12px rgba(80,40,0,.18)}
+.store-art-head h3{font-size:26px;margin:0 0 4px}
+.store-art-head p{margin:0;color:var(--muted);font-size:15px}
+.store-feature{border-radius:16px;overflow:hidden;border:1px solid var(--line);margin:0 0 16px}
+.store-feature img{width:100%;height:auto;aspect-ratio:1024/500;object-fit:cover}
+.store-feature figcaption,.shot-grid figcaption{font-size:13px;color:var(--muted);padding:8px 4px 0;font-weight:600}
+.shot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.shot-grid figure{margin:0}
+.shot-btn{display:block;width:100%;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:none;cursor:pointer}
+.shot-btn img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;transition:transform .25s}
+.shot-btn:hover img{transform:scale(1.04)}
+.lightbox{position:fixed;inset:0;z-index:60;background:rgba(12,6,2,.92);display:none;align-items:center;justify-content:center;flex-direction:column;padding:20px}
+.lightbox.open{display:flex}
+.lightbox img{max-width:min(1100px,94vw);max-height:78vh;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.lightbox .lb-cap{color:#fff1dc;font-weight:600;margin-top:14px;font-size:15px;text-align:center}
+.lightbox .lb-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer}
+.lightbox .lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);width:44px;height:44px;border-radius:50%;font-size:22px;cursor:pointer}
+.lightbox .lb-prev{left:14px}.lightbox .lb-next{right:14px}
+/* Terrasweep wide card */
+.terra{margin-top:18px;background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 4px 16px rgba(80,40,0,.06);display:grid;grid-template-columns:1.05fr .95fr}
+.terra-media{padding:16px 0 16px 16px;display:flex;flex-direction:column;gap:12px}
+.terra-main{border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.terra-main img{width:100%;height:100%;object-fit:cover;aspect-ratio:16/10}
+.terra-shots{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.terra-shots figure{margin:0}
+.terra-shots figcaption{font-size:12px;color:var(--muted);padding:6px 2px 0;font-weight:600}
+.terra-body{padding:24px;display:flex;flex-direction:column;gap:9px}
+.terra-body h3{font-size:30px;margin:2px 0 0}
+.terra-body p{color:var(--muted);margin:0;font-size:15px}
+.terra-body .art-dir{font-size:14px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--ink)}
+.terra-body .foot{margin-top:auto;padding-top:10px;border-top:1px dashed var(--line);font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%) translateY(20px);bottom:18px;background:var(--ink);color:var(--bg);padding:13px 16px;border-radius:12px;font-weight:600;max-width:min(520px,92vw);opacity:0;pointer-events:none;transition:.25s;z-index:50;box-shadow:var(--shadow);font-size:14px}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.hidden-card{display:none!important}
+@media(max-width:860px){
+  .hero-grid,.featured,.about,.support-hero,.support-big,.terra{grid-template-columns:1fr}
+  .terra-media{padding:16px 16px 0}
+  .grid{grid-template-columns:1fr}
+  .shot-grid{grid-template-columns:1fr 1fr}
+  .timeline{grid-template-columns:1fr 1fr}
+  .hero-art{min-height:260px;position:relative}
+  nav a:not(.support-nav){display:none}
+  .meta{grid-template-columns:1fr 1fr}
+}
+@media(max-width:520px){ .timeline{grid-template-columns:1fr} .hero{padding-top:28px} .shot-grid{grid-template-columns:1fr} .store-art-head{flex-direction:column;align-items:flex-start} .terra-shots{grid-template-columns:1fr 1fr} .terra-body{padding:20px} }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap topbar-in">
+  <a class="brand" href="#top" aria-label="ToastyRaptor home">
+    <span class="claw" aria-hidden="true">🦖</span>
+    <span><b>Toasty<span>Raptor</span></b><small>Indie Game Studio</small></span>
+  </a>
+  <nav aria-label="Main">
+    <a href="#out-now">Out Now</a><a href="#coming-soon">Coming Soon</a><a href="#about">About</a><a href="#contact">Contact</a>
+    <a class="support-nav" href="#support">♥ Support the Dev</a>
+  </nav>
+</div></header>
+
+<main id="top" class="wrap">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid">
+      <div>
+        <span class="eyebrow">🦖 ToastyRaptor · Google Play &amp; Steam</span>
+        <h1>Small studio.<br><em>Big teeth.</em></h1>
+        <p class="lede"><strong>ToastyRaptor</strong> is an indie game studio making bold, offbeat games — a patriotic T-Rex arcade blaster, a checkers roguelike where every crown is earned the hard way, a bouncy little plopper, a gothic match-3 with a serpent, a wager, and a wheel, and an isometric voxel sweeper-roguelike where every tile you reveal is new territory.</p>
+        <p class="lede" style="font-size:16px">Two games are live right now. Three more are on the way. This is the whole catalogue — what's out, and what's coming soon.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <a class="btn ember" href="#out-now">▶ Play what's out now</a>
+          <a class="btn ghost" href="#coming-soon">See what's coming soon →</a>
+        </div>
+        <div class="stats" aria-label="Studio at a glance">
+          <div class="stat"><b>2</b><span>Games live</span></div>
+          <div class="stat"><b>3</b><span>Coming soon</span></div>
+          <div class="stat"><b>5</b><span>Games total</span></div>
+          <div class="stat"><b>2</b><span>Stores</span></div>
+        </div>
+      </div>
+      <figure class="hero-art" style="margin:0">
+        <img src="assets/rex.webp" alt="Illustrated cover art for National Tyrannosaurus Rex — a T-Rex wearing a stars-and-stripes bandana charging through a desert battle against drones and a mothership">
+        <figcaption class="caption"><b><span class="live-dot"></span>LIVE NOW — National Tyrannosaurus Rex</b><p>Out now on Google Play. Find ToastyRaptor there and jump in.</p></figcaption>
+      </figure>
+    </div>
+
+    <!-- SUPPORT IN HERO -->
+    <div class="support-hero" id="support-hero">
+      <div>
+        <h2>♥ Support the Dev</h2>
+        <p>ToastyRaptor is independent — no publisher, no big team, just one developer building these games and funding the next ones out of pocket. If you've enjoyed a game, or you want to see King Me, Serpent's Quest and Terrasweep finished and launched, a donation genuinely helps pay for store fees, tools, art, and development time.</p>
+      </div>
+      <div class="support-actions">
+        <a class="btn heart donate-btn" href="https://ko-fi.com/toastyraptor" target="_blank" rel="noopener noreferrer">♥ Donate to Support ToastyRaptor</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- OUT NOW -->
+  <section id="out-now">
+    <div class="sec-head">
+      <div><h2>Out now</h2><p>Playable today on Google Play — two games live, starting with the one that launched the studio.</p></div>
+      <div class="filters" role="group" aria-label="Filter games">
+        <button class="filter" data-filter="all" aria-pressed="true">All games</button>
+        <button class="filter" data-filter="live" aria-pressed="false">Out now</button>
+        <button class="filter" data-filter="soon" aria-pressed="false">Coming soon</button>
+      </div>
+    </div>
+
+    <article class="featured game-card" data-status="live">
+      <img src="assets/rex.webp" alt="National Tyrannosaurus Rex artwork — T-Rex in a stars-and-stripes bandana fighting an alien armada in the desert">
+      <div class="featured-body">
+        <span class="badge live">● Live · Google Play</span>
+        <h3>National Tyrannosaurus Rex</h3>
+        <p>Also known as <strong>USA REX</strong>. A national T-Rex side-scroller / shoot-'em-up with Primal Rage–style grit. Stomp, blast, and roar through waves of enemies, take on a five-boss gauntlet, and earn the giant TOTAL VICTORY.</p>
+        <ul class="checks">
+          <li><strong>5-boss gauntlet:</strong> Cybernetic Octopus → Enemy Space Armada → Grey Mothership → Bioluminescent Leviathan</li>
+          <li><strong>Endless Mode</strong> unlocked by victory — enemies get tougher every wave, best wave banked</li>
+          <li><strong>Permanent gold trophy</strong> for clearing the gauntlet</li>
+          <li><strong>Steam edition in the works:</strong> paid, ad-free — $4.99 planned</li>
+        </ul>
+        <div class="meta">
+          <div><span>Platform</span><b>Android — Google Play</b></div>
+          <div><span>Genre</span><b>Arcade · Side-scroller / Shmup</b></div>
+          <div><span>Rating</span><b>Everyone 10+</b></div>
+          <div><span>Launched</span><b>November 7, 2026</b></div>
+        </div>
+        <p style="font-size:14px;color:var(--muted)">How to get it: open Google Play, search <strong>“National Tyrannosaurus Rex”</strong> by <strong>ToastyRaptor</strong>. On Steam, look for publisher <strong>ToastyRaptor</strong> (username: toastyraptor) — the Steam edition is coming soon.</p>
+      </div>
+    </article>
+
+    <!-- REX STORE ART — the actual Google Play listing art, shown alongside the cover art above -->
+    <div class="store-art game-card" data-status="live">
+      <div class="store-art-head">
+        <img class="icon" src="assets/rex-icon.png" alt="National Tyrannosaurus Rex app icon — a snarling black T-Rex head with a glowing orange eye and red slash marks on a purple background" width="512" height="512">
+        <div>
+          <h3>The official Play Store art</h3>
+          <p>The exact art from the game's Google Play listing — the same feature graphic, app icon, and screenshots you'll see on Play and Steam. Shown here alongside the cover art above, not instead of it. Tap any screenshot to view it full-size.</p>
+        </div>
+      </div>
+      <figure class="store-feature">
+        <img src="assets/rex-feature.png" alt="National Tyrannosaurus Rex Play Store feature graphic — the game's title in bold yellow letters above a roaring T-Rex in a stars-and-stripes bandana, standing in jungle temple ruins under a stormy purple sky with fighter jets, helicopters, and a red moon" width="1024" height="500">
+        <figcaption>Feature graphic — 1024 × 500, as it appears at the top of the Play Store listing</figcaption>
+      </figure>
+      <div class="shot-grid">
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-octopus.png" data-cap="Boss 1 — Cybernetic Octopus: the tentacle-whip fight"><img src="assets/rex-shot-octopus.png" alt="Gameplay screenshot — the T-Rex facing the Cybernetic Octopus boss and its whipping tentacles" loading="lazy" width="1280" height="720"></button>
+          <figcaption>Boss 1 — Cybernetic Octopus</figcaption>
+        </figure>
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-primal.png" data-cap="Wave 1 — spell R-E-X: fly into the glowing letters, then chomp, sling, and fire"><img src="assets/rex-shot-primal.png" alt="Gameplay screenshot — Wave 1, the T-Rex collecting glowing R-E-X letters with Bone, Sling, MG, and Chomp controls on screen" loading="lazy" width="1280" height="720"></button>
+          <figcaption>Wave 1 — spell R-E-X</figcaption>
+        </figure>
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-support.png" data-cap="Support inbound — call in backup mid-wave"><img src="assets/rex-shot-support.png" alt="Gameplay screenshot — 'Support inbound' announced during Wave 1 as the T-Rex waits by the temple columns" loading="lazy" width="1280" height="720"></button>
+          <figcaption>Support inbound</figcaption>
+        </figure>
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-armada.png" data-cap="Boss 2 — Enemy Space Armada: waves of alien ships"><img src="assets/rex-shot-armada.png" alt="Gameplay screenshot — the T-Rex battling the Enemy Space Armada boss wave" loading="lazy" width="1280" height="720"></button>
+          <figcaption>Boss 2 — Enemy Space Armada</figcaption>
+        </figure>
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-mothership.png" data-cap="Boss 3 — Grey Mothership: the big ship comes down"><img src="assets/rex-shot-mothership.png" alt="Gameplay screenshot — the T-Rex fighting the Grey Mothership boss" loading="lazy" width="1280" height="720"></button>
+          <figcaption>Boss 3 — Grey Mothership</figcaption>
+        </figure>
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-leviathan.png" data-cap="Boss 4 — Bioluminescent Leviathan: the final boss of the gauntlet"><img src="assets/rex-shot-leviathan.png" alt="Gameplay screenshot — the T-Rex facing the glowing Bioluminescent Leviathan boss" loading="lazy" width="1280" height="720"></button>
+          <figcaption>Boss 4 — Bioluminescent Leviathan</figcaption>
+        </figure>
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-victory.png" data-cap="TOTAL VICTORY — clear the gauntlet to win the game"><img src="assets/rex-shot-victory.png" alt="Gameplay screenshot — the TOTAL VICTORY screen after clearing the boss gauntlet" loading="lazy" width="1280" height="720"></button>
+          <figcaption>TOTAL VICTORY</figcaption>
+        </figure>
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-title.png" data-cap="Title screen — USA REX, with the gold Gauntlet Champion trophy and Endless Mode unlocked"><img src="assets/rex-shot-title.png" alt="Title screen screenshot — USA REX title with the gold Gauntlet Champion trophy, controls listed, and Endless Mode offered" loading="lazy" width="1280" height="720"></button>
+          <figcaption>Title screen — trophy &amp; Endless Mode</figcaption>
+        </figure>
+        <figure>
+          <button class="shot-btn" type="button" data-full="assets/rex-shot-pause.png" data-cap="Paused — hints and controls, right where you left the fight"><img src="assets/rex-shot-pause.png" alt="Gameplay screenshot — the pause screen with gameplay hints over the action" loading="lazy" width="1280" height="720"></button>
+          <figcaption>Paused — hints on screen</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <article class="featured game-card" data-status="live" style="margin-top:18px">
+      <img src="assets/plop-it.webp" alt="Plop It! artwork — glossy colorful blobs dropping and splashing onto a soft green grid under a blue sky">
+      <div class="featured-body">
+        <span class="badge live">● Live · Google Play</span>
+        <h3>Plop It!</h3>
+        <p>The studio's cheerful one. A bright, bouncy, pick-up-and-play casual game built for quick sessions — easy to start, satisfying to plop, and made for everyone. The Android version is free, with no ads.</p>
+        <ul class="checks">
+          <li><strong>Free on Android</strong> — no ads</li>
+          <li><strong>Quick sessions</strong> — easy to start, satisfying to plop</li>
+          <li><strong>Made for everyone</strong> — rated Everyone</li>
+        </ul>
+        <div class="meta">
+          <div><span>Platform</span><b>Android — Google Play</b></div>
+          <div><span>Genre</span><b>Casual · Family-friendly</b></div>
+          <div><span>Rating</span><b>Everyone</b></div>
+          <div><span>Launched</span><b>November 9, 2026</b></div>
+        </div>
+        <a class="btn ember" href="https://play.google.com/store/apps/details?id=com.base6a7a86ecb128e5882298ae3e.app" target="_blank" rel="noopener noreferrer">▶ Get it on Google Play</a>
+        <p style="font-size:13px;color:var(--muted);margin-top:12px">Production Release 7 · v2.133512.0 · Live on Google Play in 178 countries at 100% rollout.</p>
+      </div>
+    </article>
+  </section>
+
+  <!-- COMING SOON -->
+  <section id="coming-soon">
+    <div class="sec-head"><div><h2>Coming soon</h2><p>Three games in the pipeline — one in closed testing, two in development. No fake dates: each card says exactly where it stands.</p></div></div>
+    <div class="grid">
+      <article class="card game-card" data-status="soon">
+        <img src="assets/king-me.webp" alt="King Me artwork — a crowned checker piece on a red and black board in a torch-lit dungeon throne room">
+        <div class="card-body">
+          <span class="badge test" style="align-self:flex-start">In Closed Testing</span>
+          <h3>King Me</h3>
+          <p>Checkers, rebuilt as a roguelike. Fight across board after board on <em>The Road</em>, clear bosses and their guards, hit the three goals on each board, and build an army with 100+ upgrades, wild weapons, Trump &amp; Miracle cards, and assignable hats — from a Hard Hat shield to a Phoenix Hat that survives one fatal hit.</p>
+          <div class="tags"><span class="tag">Checkers Roguelike</span><span class="tag">Strategy</span><span class="tag">Steam Flagship</span></div>
+          <p class="foot"><strong>Status:</strong> Closed test live on Google Play (178 regions) · Steam flagship in development<br><strong>Win:</strong> clear or block every enemy · <strong>Lose:</strong> army gone, no legal move, or the clock runs out</p>
+        </div>
+      </article>
+
+      <article class="card game-card" data-status="soon">
+        <img src="assets/serpents-quest.webp" alt="Serpent's Quest artwork — an emerald serpent coiled around glowing red, green and gold gems in a gothic dungeon, with a princess silhouette behind">
+        <div class="card-body">
+          <span class="badge dev" style="align-self:flex-start">In Development</span>
+          <h3>Serpent's Quest</h3>
+          <p>A gothic-romance match-3, rebuilt from scratch. Match gems across 6 depths and 12 chapters, take the Demonic Wager, spin the Wheel of the Serpent for 5 gems, and collect daily rewards as the story descends. Winnings pay only in gems and content — there's no cash-out.</p>
+          <div class="tags"><span class="tag">Match-3</span><span class="tag">Gothic Romance</span><span class="tag">Story Campaign</span></div>
+          <p class="foot"><strong>Status:</strong> Rebuild in progress in Godot — first full build (v0.1) complete with wager, wheel, chapters &amp; daily reward<br><strong>Note:</strong> Contains simulated gambling — adults only</p>
+        </div>
+      </article>
+    </div>
+
+    <!-- TERRASWEEP — newest in-development title, wide card with biome gallery -->
+    <article class="terra game-card" data-status="soon">
+      <div class="terra-media">
+        <div class="terra-main">
+          <img src="assets/terrasweep-wide.png" alt="Terrasweep gameplay in the Wilds biome — an isometric voxel island with numbered minesweeper tiles revealed, green monsters roaming, blue knights standing guard, and a castle flying a flag" width="1280" height="800">
+        </div>
+        <div class="terra-shots">
+          <figure>
+            <button class="shot-btn" type="button" data-full="assets/terrasweep-title.png" data-cap="Terrasweep title screen — a pixel roguelike: reveal the land, slay what hides, take it all"><img src="assets/terrasweep-title.png" alt="Terrasweep title screen — TERRASWEEP in gold letters above pixel sprites of a knight, a goblin, a dragon and a princess" loading="lazy" width="1280" height="800"></button>
+            <figcaption>Title screen</figcaption>
+          </figure>
+          <figure>
+            <button class="shot-btn" type="button" data-full="assets/terrasweep-ashlands.png" data-cap="The Ashlands — Region 2: ash-grey and dusty-rose voxel wastes, 39 monsters on the board"><img src="assets/terrasweep-ashlands.png" alt="Terrasweep Ashlands biome — an isometric voxel board in dusty rose and ash grey with numbered tiles, monsters and knights" loading="lazy" width="1280" height="800"></button>
+            <figcaption>Biome — Ashlands</figcaption>
+          </figure>
+          <figure>
+            <button class="shot-btn" type="button" data-full="assets/terrasweep-fungal.png" data-cap="The Fungal Deep — Region 2: pale lilac voxel depths, 60 monsters on the board"><img src="assets/terrasweep-fungal.png" alt="Terrasweep Fungal Deep biome — a pale white and lilac isometric voxel board with numbered tiles, monsters and knights" loading="lazy" width="1280" height="800"></button>
+            <figcaption>Biome — Fungal Deep</figcaption>
+          </figure>
+          <figure>
+            <button class="shot-btn" type="button" data-full="assets/terrasweep-sunken.png" data-cap="The Sunken Wards — Region 2: flooded blue wards, 103 monsters on the board"><img src="assets/terrasweep-sunken.png" alt="Terrasweep Sunken Wards biome — a flooded blue and teal isometric voxel board with numbered tiles, monsters and knights" loading="lazy" width="1280" height="800"></button>
+            <figcaption>Biome — Sunken Wards</figcaption>
+          </figure>
+        </div>
+      </div>
+      <div class="terra-body">
+        <span class="badge dev" style="align-self:flex-start">In Development</span>
+        <h3>Terrasweep</h3>
+        <p>An isometric voxel roguelike in the style of <em>Mamono Sweeper</em>. Every minesweeper tile you reveal expands your territory — battle the monsters hiding under the board, harvest the resources you uncover, and conquer the castles and villages standing in your way. Runs are permadeath, but what you bank carries into the next expedition through meta-progression.</p>
+        <p class="art-dir"><strong>Art direction:</strong> Shadow of the Colossus × Monument Valley × Minecraft × Mamono Sweeper</p>
+        <ul class="checks">
+          <li><strong>Slices 1–4 shipped:</strong> a playable Godot build you can already sweep, fight and conquer in</li>
+          <li><strong>Castle &amp; village sieges</strong> — including a captive princess waiting in the castle</li>
+          <li><strong>Ancient dragon boss</strong> every 5 regions</li>
+          <li><strong>Expansive 3×3-section world</strong> spanning four biomes: the Wilds, Ashlands, Fungal Deep and Sunken Wards</li>
+        </ul>
+        <div class="tags"><span class="tag">Voxel Roguelike</span><span class="tag">Minesweeper</span><span class="tag">Permadeath</span><span class="tag">Meta-progression</span></div>
+        <p class="foot"><strong>Status:</strong> In Development — playable Godot build (Slices 1–4) · Not yet published on Google Play or Steam</p>
+      </div>
+    </article>
+
+    <div class="roadmap" style="margin-top:20px">
+      <h3>The road ahead</h3>
+      <p class="sub">Where each game stands right now — updated from the studio's real milestones.</p>
+      <div class="timeline">
+        <div class="tl"><b>✅ Live · Nov 7, 2026</b><strong>National Tyrannosaurus Rex</strong><p>Launched on Google Play in 178 countries at 100% rollout.</p></div>
+        <div class="tl"><b>✅ Live · Nov 9, 2026</b><strong>Plop It!</strong><p>Launched on Google Play (Production Release 7, v2.133512.0) in 178 countries at 100% rollout.</p></div>
+        <div class="tl"><b>🧪 Testing now</b><strong>King Me</strong><p>Closed test running on Google Play. Steam flagship build continues.</p></div>
+        <div class="tl"><b>🛠️ Building</b><strong>Serpent's Quest + Terrasweep + Rex on Steam</strong><p>Serpent's Quest v0.1 is built. Terrasweep slices 1–4 are playable in Godot. Rex Steam edition is built and ad-free, awaiting its store launch.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="sec-head"><div><h2>About ToastyRaptor</h2><p>One developer, five very different games, one name on every store page.</p></div></div>
+    <div class="about">
+      <div class="about-card">
+        <h3>🦖 The studio</h3>
+        <p><strong>ToastyRaptor</strong> is an independent game studio based in Boston, MA. It makes games with strong, simple hooks and a lot of personality: an arcade T-Rex that fights a mothership, checkers that plays like a dungeon crawl, and a match-3 that makes a wager with you.</p>
+        <p>Games are built in Godot and shipped by ToastyRaptor itself — design, code, testing, and store launches all run through the one studio. Every title here started as a real, playable build tested by real players before it went anywhere near a store.</p>
+        <p style="margin:0">If a game on this page says it's live, it's live. If it says coming soon, it's honestly still being made.</p>
+      </div>
+      <div class="about-card" id="contact">
+        <h3>Find ToastyRaptor</h3>
+        <div class="kv">
+          <div><span>Studio / developer name</span><b>ToastyRaptor</b></div>
+          <div><span>Google Play</span><b>Developer: ToastyRaptor</b></div>
+          <div><span>Steam</span><b>Publisher: ToastyRaptor</b></div>
+          <div><span>Steam username</span><b>toastyraptor</b></div>
+          <div><span>Based in</span><b>Boston, MA</b></div>
+          <div><span>Engine</span><b>Godot</b></div>
+        </div>
+        <h3 style="margin-top:22px">Contact</h3>
+        <p>Questions, feedback, bug reports, or press — email the studio:</p>
+        <p style="font-size:17px"><a href="mailto:toastyraptorenterprises@gmail.com"><strong>toastyraptorenterprises@gmail.com</strong></a></p>
+        <button class="btn ghost" type="button" id="copyEmail">Copy email address</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPORT NEAR FOOTER -->
+  <section id="support">
+    <div class="support-big">
+      <div>
+        <h2>♥ Support the Dev — <span>support ToastyRaptor</span></h2>
+        <p>Every ToastyRaptor game is self-funded. Donations go straight toward making the next ones: Steam and Google Play fees, development tools, art, music, and the hours it takes to test, fix, and ship.</p>
+        <p>No donation is too small, and there's never any pressure — playing, rating, and sharing the games helps too. But if you want to put real fuel in the tank, this is how.</p>
+        <p style="margin:0"><strong>Thank you for backing an indie dev directly.</strong></p>
+      </div>
+      <div class="support-actions">
+        <a class="btn donate-main donate-btn" href="https://ko-fi.com/toastyraptor" target="_blank" rel="noopener noreferrer">♥ Donate to Support ToastyRaptor</a>
+        <a class="btn donate-alt donate-btn" href="https://ko-fi.com/toastyraptor" target="_blank" rel="noopener noreferrer">♥ Support ToastyRaptor</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer><div class="wrap">
+  <span><strong style="color:var(--ink)">ToastyRaptor</strong> · Indie games from Boston, MA · Publisher on Google Play &amp; Steam</span>
+  <span>Contact: <a href="mailto:toastyraptorenterprises@gmail.com">toastyraptorenterprises@gmail.com</a> · <a href="#support">Support the Dev</a></span>
+</div></footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+  <button class="lb-close" type="button" id="lbClose" aria-label="Close viewer">✕</button>
+  <button class="lb-nav lb-prev" type="button" id="lbPrev" aria-label="Previous screenshot">‹</button>
+  <img id="lbImg" alt="">
+  <div class="lb-cap" id="lbCap"></div>
+  <button class="lb-nav lb-next" type="button" id="lbNext" aria-label="Next screenshot">›</button>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  var toast=document.getElementById('toast'), timer=null;
+  function show(msg){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(timer); timer=setTimeout(function(){toast.classList.remove('show')},4200); }
+  var copyBtn=document.getElementById('copyEmail');
+  if(copyBtn){ copyBtn.addEventListener('click',function(){
+    var email='toastyraptorenterprises@gmail.com';
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(email).then(function(){show('Email copied: '+email)},function(){show(email)}); }
+    else { show(email); }
+  });}
+  document.querySelectorAll('.filter').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      document.querySelectorAll('.filter').forEach(function(x){x.setAttribute('aria-pressed','false')});
+      btn.setAttribute('aria-pressed','true');
+      var f=btn.getAttribute('data-filter');
+      document.querySelectorAll('.game-card').forEach(function(card){
+        var showCard = (f==='all') || (card.getAttribute('data-status')===f);
+        card.classList.toggle('hidden-card', !showCard);
+      });
+      var target = f==='live' ? '#out-now' : (f==='soon' ? '#coming-soon' : '#out-now');
+      var el=document.querySelector(target); if(el){ el.scrollIntoView({behavior:'smooth',block:'start'}); }
+    });
+  });
+  /* Screenshot lightbox */
+  var shots=Array.prototype.slice.call(document.querySelectorAll('.shot-btn'));
+  var lb=document.getElementById('lightbox'), lbImg=document.getElementById('lbImg'), lbCap=document.getElementById('lbCap'), idx=0;
+  function openLb(i){
+    idx=(i+shots.length)%shots.length;
+    var btn=shots[idx], img=btn.querySelector('img');
+    lbImg.src=btn.getAttribute('data-full');
+    lbImg.alt=img ? img.alt : '';
+    lbCap.textContent=btn.getAttribute('data-cap')||'';
+    lb.classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function closeLb(){ lb.classList.remove('open'); document.body.style.overflow=''; }
+  shots.forEach(function(btn,i){ btn.addEventListener('click',function(){ openLb(i); }); });
+  document.getElementById('lbClose').addEventListener('click',closeLb);
+  document.getElementById('lbPrev').addEventListener('click',function(e){ e.stopPropagation(); openLb(idx-1); });
+  document.getElementById('lbNext').addEventListener('click',function(e){ e.stopPropagation(); openLb(idx+1); });
+  lb.addEventListener('click',function(e){ if(e.target===lb){ closeLb(); } });
+  document.addEventListener('keydown',function(e){
+    if(!lb.classList.contains('open')){ return; }
+    if(e.key==='Escape'){ closeLb(); }
+    if(e.key==='ArrowLeft'){ openLb(idx-1); }
+    if(e.key==='ArrowRight'){ openLb(idx+1); }
+  });
+})();
+</script>
+</body>
+</html>
